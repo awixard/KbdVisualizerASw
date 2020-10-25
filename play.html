@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Visual Player</title>
+  <!--link rel="stylesheet" type="text/css" href="./css/svgStyles.css" media="screen" /-->
+  <link rel="stylesheet" type="text/css" href="./css/reset.css" media="screen" />
+</head>
+<body>
+  <!--
+  <div id =tracksDiv width=1200 style="overflow-x:scroll; overflow-y: scroll">
+  <canvas id=tracksCanvas width=4000 height=800></canvas>
+  -->
+
+  <div id =tracksDiv style="height:820px; position:relative; overflow-x:scroll; overflow-y: scroll">
+  <canvas id=tracksCanvas width=1200 height=800 style="position:absolute; top:0; left:0; z-index: 0"></canvas>
+  <canvas id=playCursorLayer width=1200 height=800 style="position:absolute; top:0; left:0; z-index: 1"></canvas>
+  
+  </div>
+  <div id='VDOMRoot'></div>
+
+  <!--input type="file" id="fileReader"-->
+  <button id="btnSuspendGo" disabled="true">C7: Sus/Go</button>
+  <button id="btnStop" disabled="true">#C7:Stop</button>
+  <button id="btnSlow" disabled="true">Speed to 0.25</button>
+  <button id="btnMinus10s" disabled="true">- 10s</button>
+  <button id="btnRewind" disabled="true">Rewind</button>
+  <button id="btnPreviousFullBeat" disabled="true">B6: On beat</button>
+  <button id="btnMinus1Beat" disabled="true">- 1 beat</button>
+  <button id="btnStep1Beat" disabled="true">D7: Step</button>
+</body>
+
+<script>
+const vd = require('virtual-dom')
+var diff = vd.diff;
+var patch = vd.patch;
+var createElement = vd.create;
+
+const g = require('./scripts/globals.js')
+const asKeyboard = require('./scripts/kbd.js').asKeyboard
+
+const asEnsemble = require('./scripts/ensemble.js')
+const asSynthRack = require('./scripts/synth.js').asSynthRack
+
+const rm = require('./scripts/recalc.js').rm
+const recalc = rm.scheduleRecalc
+g.recalc = rm.scheduleRecalc
+
+const hlp = require('./scripts/helpers.js')
+const vTracks = require('./scripts/visualTracks.js')
+const gebi = hlp.gebi
+g.timer = require('./scripts/timer.js')
+
+const fileSpecs = {  
+  morning:{ fileName: "grieg-morning-B.json", title:"Grieg: Morning mood"},
+  faune: {fileName:"faune-gpo5-vkbd-B.json", title:"Debussy Faune"},
+  jupiterII:{fileName: 'mozart-41-II-B.json', title:'Mozart Jupiter II'},
+  seine:{fileName:'seine.json', title:'LRG Seine'}
+}
+var currentCompositionId ="morning"//'faune'//'seine'//'faune' //'jupiterII'
+// TEE myös kanasvanmäppäystaulukko -> preformance.js
+
+const tt = function(aTime){
+  let tr = g.trackers.getSpecFor(aTime)
+  if( !tr ) { /*console.log('EOP'); */
+    if (g.timerState.playState === ':stopped') return
+    g.timer.stop();
+    g.ensemble.recalc()
+    recalc(); 
+    return 
+  }
+  g.ensemble.recalc(tr)  //Toimi vata kun midi setup on tehty
+  recalcVDOM(aTime, g.trackers)
+  recalc()
+  vTracks.drawPlayCursor(g.trackers.msToTicks( aTime ), aTime)
+  if (aTime === 0) vTracks.scrollControl.fromStart()
+  if (g.timerState.playState === ':playing') vTracks.scrollControl.scrollIt()
+}
+g.timerState.recalc = ()=>tt(g.timerState.time)
+
+const handleTimeClicked = aRec=>{
+  if (g.timerState.playState !== ':stopped') return
+  g.timer.setTimeToStart(g.trackers.ticksToMs(aRec.ticks))
+}
+vTracks.addClickListener(handleTimeClicked)
+
+const s = ()=>{ g.timer.stop(); g.ensemble.recalc() }
+
+const go = ()=>{g.timer.go()}
+const f = ()=>{
+  let nextStopMs = g.trackers.newTimeByDeltaBeats(g.timer.time, 1)
+  timer.setTimeToSuspend(nextStopMs).go()
+}
+const e = ()=>{
+  g.timer.setTimeToStart (g.trackers.newTimeByDeltaBeats(g.timer.time,0,':down'))
+}
+const cbMidiSetup = function(){
+  console.log('Midi rdy')
+  g.synthRack = asSynthRack.call({},midiSetup )
+  g.synthRack.addSynth('s1','01. Internal MIDI')
+  g.synthRack.addSynth('s2','02. Internal MIDI')
+  g.synthRack.addSynth('s3','Yamaha')
+  g.kbd = asKeyboard.call({}, 'Yamaha', midiSetup)
+  //g.kbd.addListener(anEvent=> g.synthRack.handleEvent(anEvent.setPlayer('s1', 15)))
+  g.kbd.addListener(g.midiKeyMapper.act)
+  g.appState.midiReady = true
+  tt(0)
+}
+var evHlp = require('./scripts/musicEvent.js').helpers
+
+var cbFileSelected = function( parsedJSON ){
+  g.performance = parsedJSON
+  createTrackNameTable()
+  g.trackers = asEnsembleTrackers.call({}, g.performance)
+  g.ensemble = asEnsemble.call({}, currentCompositionId, g.trackers.getSpecFor(0))
+  //g.ensemble = asEnsemble.call({}, 'faune', g.trackers.getSpecFor(0))
+  vTracks.doPerformanceSetup()
+  vTracks.drawTracksCanvas()
+}
+const asEnsembleTrackers = require('./scripts/spanTrackers.js')
+/*
+var fileselect = (function(_fileElement, _callback){
+  if (!window.File || !window.FileReader){
+    if (this.debug) console.log('The File APIs are not fully supported in this browser.');
+    return false;
+  };
+  document.getElementById(_fileElement).onchange = (function(_t){
+    return function(InputEvt){
+      if (!InputEvt.target.files.length) return false;
+      var reader = new FileReader();							
+      g.fileName = InputEvt.target.files[0].name
+      reader.readAsText(InputEvt.target.files[0]);
+      reader.onload = (function(_t) {
+        return function(e){
+          _callback( JSON.parse(e.target.result), );
+        }
+      })(_t);								
+    };
+	})(this);
+})( 'fileReader', cbFileSelected )
+*/
+
+const asCtlUI = function(){
+  this.buttons = []
+  this.dict = {} 
+  this.addBtn = function(aBtnId, aPredicate, anAction, isEnabled){
+    let node = gebi(aBtnId);
+    let ob ={ id: aBtnId, predicate: aPredicate, 
+      action: anAction, domNode: node, enabled:isEnabled
+    }
+    this.buttons.push(ob)
+    this.dict[ob.id] = ob
+    node.disabled = !isEnabled
+    node.addEventListener('click', e=>g.ctlUI.act(e.target.id))
+  }
+  this.recalc = ()=>{
+    this.buttons .forEach(  aBtn=>{
+      let newState = aBtn.predicate()
+      if(aBtn.enabled === newState ) return
+      aBtn.domNode.disabled = !newState
+      aBtn.enabled = newState;
+    })
+  }
+  this.act = function( aBtnId ){
+    this.buttons.find( aBtn=> aBtn.id === aBtnId).action()
+  }
+  return this
+}
+
+const renderVKbd = require('./scripts/visualKbd.js').renderSvg
+const createTrackNameTable = require('./scripts/visualKbd.js').createTrackNameTable
+var VDOMRoot = gebi('VDOMRoot')
+var tree = vd.h('h2', {},'Wait for it!')
+var rootNode = createElement(tree);
+VDOMRoot.appendChild(rootNode);
+
+var recalcVDOM = function(aTime,trackers){
+  let newTree = renderVKbd(aTime, trackers)
+  var patches = diff(tree, newTree)
+  rootNode = patch(rootNode,patches)
+  tree = newTree
+};
+
+const midiSetup = require('./scripts/midiSetup')
+document.addEventListener('DOMContentLoaded', ()=>{
+  console.log('Doc loaded')
+    g.ctlUI = asCtlUI.call({})
+    rm.setRecalcSet([g.ctlUI.recalc]);
+
+    g.ctlUI.addBtn('btnRewind',
+      ()=>!!g.performance && !(g.timerState.playState === ':playing'),
+      ()=>{ 
+        g.timer.setTimeToStart(0).setTimeToStop(g.consts.hugeTimeMs)
+        tt(0) 
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnMinus10s',
+      ()=>!!g.performance && !(g.timerState.playState === ':playing'),
+      ()=>{
+        g.timer.time = g.timer.time >= 10000? g.timer.time-10000 : 0
+        tt(g.timer.time)
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnMinus1Beat',
+      ()=>!!g.performance && !(g.timerState.playState === ':playing'),
+      ()=>{
+        let newTime = g.trackers.newTimeByDeltaBeats(g.timer.time, -1)
+        g.timer.setTimeToStart( newTime )
+        tt(g.timer.time)
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnStep1Beat',
+      ()=>!!g.performance && !(g.timerState.playState === ':playing'),
+      ()=>{
+        let newTime = g.trackers.newTimeByDeltaBeats(g.timer.time, 1)
+        g.timer.setTimeToSuspend( newTime ).go()
+        tt(g.timer.time)
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnPreviousFullBeat',
+      ()=>!!g.performance && !(g.timerState.playState === ':playing'),
+      ()=>{
+        let newTime = g.trackers.newTimeByDeltaBeats(g.timer.time, 0,':down')
+        g.timer.setTimeToStart( newTime )
+        tt(g.timer.time)
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnSlow',
+      ()=>!!g.performance && !(g.timerState.playState === ':playing'),
+      ()=>{
+        if (g.timer.timeScale === 1) {
+          g.timer.setTimeScale(0.25)
+          gebi('btnSlow').innerText = 'Speed to 1.0'
+        }
+        else {
+          g.timer.setTimeScale(1)
+          gebi('btnSlow').innerText = 'Speed to 0.25'
+        }
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnSuspendGo',
+      ()=>!!g.performance,
+      ()=>{
+        if(g.timerState.playState === ':playing') g.timer.suspend()
+        else { g.timer.setTimeToStop(g.consts.hugeTimeMs); vTracks.onStart(); g.timer.go(); }
+        recalc()
+      },
+      false
+    )
+    g.ctlUI.addBtn('btnStop',
+      ()=>!!g.performance && !(g.timerState.playState === ':stopped'),
+      ()=>{ timer.stop(); recalc() },
+      false
+    )
+    midiSetup.addListener(cbMidiSetup).commence()  //Täytyy olla myöhemmin kuin doc loaded, jotta tt() oikeassa kohdassa
+    g.midiKeyMapper = asMidiKeyMapper.call({})
+      .addAction('btnPreviousFullBeat',83)
+      .addAction('btnSuspendGo', 84)
+      .addAction('btnStop',85)
+      .addAction('btnStep1Beat', 86)
+});
+
+const fwd16th = function(){
+  if (g.timerState.playState === ':playing') return
+  let newTime = g.trackers.newTimeByDeltaBeats(g.timer.time, 1/4)
+  g.timer.setTimeToSuspend( newTime ).go()
+  tt(g.timer.time)
+}
+const fwdBeat = function(){
+  if (g.timerState.playState === ':playing') return
+  let newTime = g.trackers.newTimeByDeltaBeats(g.timer.time, 1)
+  g.timer.setTimeToSuspend( newTime ).go()
+  tt(g.timer.time)
+}
+
+const asMidiKeyMapper = function(){
+  this.keyActions = {}
+  this.addAction = function(aBtnId, aMidiKeyNr){
+    this.keyActions['K'+aMidiKeyNr] = g.ctlUI.dict[aBtnId]
+    return this
+  }
+  this.act = aMusicEvent =>{
+    if (aMusicEvent.note && aMusicEvent.note === 108){
+      if (aMusicEvent.type === 'on') return this
+      if (g.kbdState.nowPlayingCount) return this
+      g.kbdState.mode = g.kbdState.mode === ':command'? ':playThru': ':command'
+      console.log(g.kbdState.mode)
+      return this
+    }
+    if(g.kbdState.mode !== ':command'){
+      g.synthRack.handleEvent(aMusicEvent.setPlayer('s2', 15))
+      return this
+    }
+    if (aMusicEvent.type !== 'on') return
+    let keyId = 'K'+aMusicEvent.note
+    if (!this.keyActions[ keyId ]) return;
+    if (!this.keyActions[ keyId ].predicate()) return
+    this.keyActions[ keyId ] && this.keyActions[ keyId ].action()
+  }
+  return this
+}
+fs = require('fs')
+g.fullPath = 'c:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
+if ( fs.existsSync(g.fullPath ) ){
+  cbFileSelected( JSON.parse(fs.readFileSync(g.fullPath)))
+}
+</script>
+</html>

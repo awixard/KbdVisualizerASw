@@ -1,0 +1,76 @@
+
+.flutes {
+  fill:rgb(60, 206, 255);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.oboes{
+  fill:rgb(187,9,142);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.englishHorns {
+  fill:rgb(133,44,152);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.clarinets {
+  fill: rgb(148,177,177);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.bassoons {
+  fill: rgb(92,98,57);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.frenchHorns{
+  fill: rgb(255,128,0);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.harps{
+  fill: rgb(255,255,85);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.violinsI{
+  fill:rgb(194,163,141);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.violinsII{
+  fill:rgb(194,163,141);
+  stroke: rgb(145, 143, 141);
+  stroke-width: 2;
+}
+.violas {
+  fill: rgb(117,71,38);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.cellos{
+  fill:rgb(150,14,14);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.basses {
+  fill:rgb(70,0,0);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.ancientCymbals {
+  fill:rgb(116,124,170);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.timpani{
+  fill:rgb(86, 89, 107);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.trumpets{
+  fill:rgb(156, 44, 15);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}

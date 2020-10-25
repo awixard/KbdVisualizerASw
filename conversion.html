@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    Simple example for JSMIDIParser 
+    <br/>
+    <input type="file" id="filereader">
+  </body>
+  <script>
+    asPerformance = require('./scripts/performance.js')
+    JSMIDIParser  = require('./scripts/JSMIDIParser.js')
+    fs = require('fs')
+    path = require('path')
+    // Your callback function
+    function MyCallback(obj){
+      //obj.track[12].event[ 5 ].deltaTime = 45280
+      //obj.track[13].event[ 5 ].deltaTime = 45280
+      console.log(obj)
+
+      performance = asPerformance.call({}, obj)
+      console.log(performance)
+      let fullPath = path.join(__dirname,'..','jsonMusic',performance.data.metaInfo.fileName+'.json')
+      fs.writeFileSync( fullPath, JSON.stringify(performance.data) )
+    };
+    
+    // JSMIDIParser
+    JSMIDIParser.IO('filereader', MyCallback);
+  </script>
+</html>
