@@ -294,7 +294,7 @@ const asMidiKeyMapper = function(){
       return this
     }
     if(g.kbdState.mode !== ':command'){
-      g.synthRack.handleEvent(aMusicEvent.setPlayer('s2', 15))
+      g.synthRack.handleEvent(aMusicEvent.setPlayer('s1', 15))
       return this
     }
     if (aMusicEvent.type !== 'on') return
@@ -306,7 +306,7 @@ const asMidiKeyMapper = function(){
   return this
 }
 fs = require('fs')
-g.fullPath = 'c:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
+g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
 if ( fs.existsSync(g.fullPath ) ){
   cbFileSelected( JSON.parse(fs.readFileSync(g.fullPath)))
 }

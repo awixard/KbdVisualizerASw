@@ -9,6 +9,9 @@ const el = function(elemName, attribs, children){
 const svg = function(attribs, children){
   return vd.h('svg', {namespace: "http://www.w3.org/2000/svg", attributes: attribs }, children);
 }
+const svgEl = function(elemName, attribs, children){
+  return vd.h(elemName, {namespace: "http://www.w3.org/2000/svg", attributes: attribs }, children);
+}
 
 const kbdWidth = 600, kbdHeight = 280, keyWidth = kbdWidth/12
 const nrOfOctaves = 8, firstOctave = 1
@@ -93,6 +96,8 @@ const createKbdImage = function(){
   }
   let result = []
   for( var i = 0; i<12; i++) result.push(getKey(i))
+  result.push(svgEl( "line",{x1:"0", y1:kbdHeight/2,x2:kbdWidth,y2:kbdHeight/2,
+    style:"stroke:rgb(160,160,160);stroke-width:1px"}, [ ] ))
   return result
 }
 const renderSvg = function( aTime, anEnsembleTracker){
