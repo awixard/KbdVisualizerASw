@@ -304,7 +304,27 @@ const asMidiKeyMapper = function(){
     this.keyActions[ keyId ] && this.keyActions[ keyId ].action()
   }
   return this
-}
+}//asMidiKeyMapper
+const asciiKbdMapper = function(){
+  this.handleAsciiKbdEvent=function(e){
+    console.log(e.code)
+    if(e.code ==='Space'){
+      let action = g.ctlUI.dict['btnSuspendGo']
+      if (!action.predicate) return;
+      action.action()
+      return
+    }
+    if(e.code ==='AltLeft'){
+      let action = g.ctlUI.dict['btnStop']
+      if (!action.predicate) return;
+      action.action()
+      return
+    }
+  }
+  return this
+}.call({})
+window.addEventListener('keyup',asciiKbdMapper.handleAsciiKbdEvent )
+
 fs = require('fs')
 g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
 if ( fs.existsSync(g.fullPath ) ){
