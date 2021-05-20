@@ -28,6 +28,8 @@
   <button id="btnPreviousFullBeat" disabled="true">B6: On beat</button>
   <button id="btnMinus1Beat" disabled="true">- 1 beat</button>
   <button id="btnStep1Beat" disabled="true">D7: Step</button>
+  <button id="btnToPreviousStartTime" disabled="true">E: Prev.start pos</button>
+  
 </body>
 
 <script>
@@ -74,13 +76,15 @@ const tt = function(aTime){
   recalc()
   vTracks.drawPlayCursor(g.trackers.msToTicks( aTime ), aTime)
   if (aTime === 0) vTracks.scrollControl.fromStart()
-  if (g.timerState.playState === ':playing') vTracks.scrollControl.scrollIt()
+  //if (g.timerState.playState === ':playing')
+    vTracks.scrollControl.scrollIt()
 }
 g.timerState.recalc = ()=>tt(g.timerState.time)
 
 const handleTimeClicked = aRec=>{
   if (g.timerState.playState !== ':stopped') return
-  g.timer.setTimeToStart(g.trackers.ticksToMs(aRec.ticks))
+  g.lastUsedStartTimeMs = g.trackers.ticksToMs(aRec.ticks) 
+  g.timer.setTimeToStart(g.lastUsedStartTimeMs)
 }
 vTracks.addClickListener(handleTimeClicked)
 
@@ -248,7 +252,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
       ()=>!!g.performance,
       ()=>{
         if(g.timerState.playState === ':playing') g.timer.suspend()
-        else { g.timer.setTimeToStop(g.consts.hugeTimeMs); vTracks.onStart(); g.timer.go(); }
+        else { 
+          g.timer.setTimeToStop(g.consts.hugeTimeMs); 
+          vTracks.onStart();
+          g.lastUsedStartTimeMs = g.timer.time 
+          g.timer.go(); 
+        }
         recalc()
       },
       false
@@ -256,6 +265,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
     g.ctlUI.addBtn('btnStop',
       ()=>!!g.performance && !(g.timerState.playState === ':stopped'),
       ()=>{ timer.stop(); recalc() },
+      false
+    )
+    g.ctlUI.addBtn('btnToPreviousStartTime',
+      ()=>g.performance && (g.timerState.playState === ':stopped'),
+      ()=>{g.timer.setTimeToStart(g.lastUsedStartTimeMs); tt(g.lastUsedStartTimeMs); recalc();},
       false
     )
     midiSetup.addListener(cbMidiSetup).commence()  //Täytyy olla myöhemmin kuin doc loaded, jotta tt() oikeassa kohdassa
@@ -312,12 +326,21 @@ const asciiKbdMapper = function(){
       let action = g.ctlUI.dict['btnSuspendGo']
       if (!action.predicate) return;
       action.action()
+      e.preventDefault()
       return
     }
     if(e.code ==='AltLeft'){
       let action = g.ctlUI.dict['btnStop']
       if (!action.predicate) return;
       action.action()
+      e.preventDefault()
+      return
+    }
+    if(e.code ==='KeyX'){
+      let action = g.ctlUI.dict['btnToPreviousStartTime']
+      if (!action.predicate) return;
+      action.action()
+      e.preventDefault()
       return
     }
   }
@@ -330,5 +353,6 @@ g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompo
 if ( fs.existsSync(g.fullPath ) ){
   cbFileSelected( JSON.parse(fs.readFileSync(g.fullPath)))
 }
+
 </script>
 </html>

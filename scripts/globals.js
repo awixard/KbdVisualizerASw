@@ -5,5 +5,6 @@ module.exports = {
     nowPlayingCount:0,
     mode:':command'
   },
-  consts:{hugeTimeMs:24*3600000}
+  consts:{hugeTimeMs:24*3600000},
+  lastUsedStartTimeMs:0
 }

@@ -31,7 +31,6 @@ const asTimer = function(){
 	this.playToTimeMs = g.consts.hugeTimeMs
 	g.timerState.playState = ':stopped'
 
-
 	this.setTimeScale = function( aVal ){
 		this.timeScale = aVal;
 		return this;

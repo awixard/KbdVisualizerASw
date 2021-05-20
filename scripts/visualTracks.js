@@ -129,7 +129,7 @@ var scrollControl = function(){
     if (this.tracskWidthPx - _lastPCPosPx < visibleCenterPx) return
     this.tracksDiv.scrollLeft = _lastPCPosPx - visibleCenterPx
   }
-  this.fromStart = function(){this.tracksDiv.scrollLeft = 0; return this}
+  this.fromStart = function(){this.tracksDiv.scrollLeft = 0; return this }
   return this
 }.call({})
 

@@ -43,6 +43,8 @@ const asProgramSpanTracker = function( aProgramSpanArray ){
   this.programs = aProgramSpanArray
   this.ix = -1
   this.getSpecFor = function(aTime){
+    //QaD
+    //if (!aTime) aTime = 0
     if (this.programs.length === 0) return -1 // same as inital value in ensemble state
     if ( this.ix < 0 ){
       this.ix = this.programs.findIndex( aSpec=> aTime >= aSpec.ms && aTime < aSpec.usedUntilMs)
@@ -50,8 +52,9 @@ const asProgramSpanTracker = function( aProgramSpanArray ){
     }
     if ( aTime < this.programs[this.ix].ms) this.ix = 0
     let len = this.programs.length
-    while( this.ix < len && !(aTime >= this.programs[this.ix].ms && aTime < this.programs[this.ix].usedUntilMs) ) this.ix++
-    
+    while( this.ix < len && !(aTime >= this.programs[this.ix].ms && aTime < this.programs[this.ix].usedUntilMs) )
+      this.ix++
+    //if (!this.programs[this.ix]) debugger;
     return this.programs[this.ix].program
   }
   return this
