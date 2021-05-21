@@ -76,7 +76,7 @@ const tt = function(aTime){
   recalc()
   vTracks.drawPlayCursor(g.trackers.msToTicks( aTime ), aTime)
   if (aTime === 0) vTracks.scrollControl.fromStart()
-  //if (g.timerState.playState === ':playing')
+  if (g.timerState.playState === ':playing')
     vTracks.scrollControl.scrollIt()
 }
 g.timerState.recalc = ()=>tt(g.timerState.time)
