@@ -122,6 +122,11 @@ var scrollControl = function(){
   this.visibleWidthPx=tDiv.offsetWidth,
   this.tracskWidthPx = canvasWidthPx
 
+  this.tickTimeVisible = function(ticks){
+    let timePx = xScale * ticks
+    return timePx > this.tracksDiv.scrollLeft && timePx < this.tracksDiv.scrollLeft + this.visibleWidthPx 
+  }
+  
   this.scrollIt = function(){
     let visibleCenterPx = this.visibleWidthPx / 2
     if (!_lastPCPosPx) return

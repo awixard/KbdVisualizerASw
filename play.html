@@ -269,7 +269,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
     )
     g.ctlUI.addBtn('btnToPreviousStartTime',
       ()=>g.performance && (g.timerState.playState === ':stopped'),
-      ()=>{g.timer.setTimeToStart(g.lastUsedStartTimeMs); tt(g.lastUsedStartTimeMs); recalc();},
+      ()=>{
+        g.timer.setTimeToStart(g.lastUsedStartTimeMs);
+        tt(g.lastUsedStartTimeMs);
+        if (!vTracks.scrollControl.tickTimeVisible(g.trackers.msToTicks(g.lastUsedStartTimeMs)))
+          vTracks.scrollControl.scrollIt()
+        recalc();
+      
+          },
       false
     )
     midiSetup.addListener(cbMidiSetup).commence()  //Täytyy olla myöhemmin kuin doc loaded, jotta tt() oikeassa kohdassa
