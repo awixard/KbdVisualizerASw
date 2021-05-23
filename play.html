@@ -28,7 +28,7 @@
   <button id="btnPreviousFullBeat" disabled="true">B6: On beat</button>
   <button id="btnMinus1Beat" disabled="true">- 1 beat</button>
   <button id="btnStep1Beat" disabled="true">D7: Step</button>
-  <button id="btnToPreviousStartTime" disabled="true">E: Prev.start pos</button>
+  <button id="btnToPreviousStartTime" disabled="true">X: Prev.start pos</button>
   
 </body>
 
@@ -60,7 +60,6 @@ const fileSpecs = {
   seine:{fileName:'seine.json', title:'LRG Seine'}
 }
 var currentCompositionId ="morning"//'faune'//'seine'//'faune' //'jupiterII'
-// TEE myös kanasvanmäppäystaulukko -> preformance.js
 
 const tt = function(aTime){
   let tr = g.trackers.getSpecFor(aTime)
@@ -71,7 +70,7 @@ const tt = function(aTime){
     recalc(); 
     return 
   }
-  g.ensemble.recalc(tr)  //Toimi vata kun midi setup on tehty
+  g.ensemble.recalc(tr)  //Toimi vasta kun midi setup on tehty
   recalcVDOM(aTime, g.trackers)
   recalc()
   vTracks.drawPlayCursor(g.trackers.msToTicks( aTime ), aTime)
