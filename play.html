@@ -275,8 +275,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if (!vTracks.scrollControl.tickTimeVisible(g.trackers.msToTicks(g.lastUsedStartTimeMs)))
           vTracks.scrollControl.scrollIt()
         recalc();
-      
-          },
+      },
       false
     )
     midiSetup.addListener(cbMidiSetup).commence()  //Täytyy olla myöhemmin kuin doc loaded, jotta tt() oikeassa kohdassa
