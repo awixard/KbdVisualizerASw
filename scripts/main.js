@@ -7,7 +7,7 @@ function createWindow () {
 
   //win.loadFile('./conversion.html')
   win.loadFile('./play.html')
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
   win.maximize()
   win.on('closed', () => {
     win = null

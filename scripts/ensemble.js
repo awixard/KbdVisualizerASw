@@ -44,7 +44,8 @@ morning: [
 
   { P60: ['s1',5]}, //fhorn 5
   { P56: ['s1',6]}, //trumpet
-  { P47: ['s1',7]}, //timpani
+  //{ def: ['s1',7]}, //timpani  //TÄSDÄ onko ??
+  { P47: ['s1',7]}, //timpani  //TÄSDÄ onko ??
   { P48: ['s1',8], P49:['s1',8] }, //violins I
   { P48: ['s1',9], P49: ['s1',9] }, //violins II
 
