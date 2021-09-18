@@ -57,9 +57,10 @@ const fileSpecs = {
   morning:{ fileName: "grieg-morning-B.json", title:"Grieg: Morning mood"},
   faune: {fileName:"faune-gpo5-vkbd-B.json", title:"Debussy Faune"},
   jupiterII:{fileName: 'mozart-41-II-B.json', title:'Mozart Jupiter II'},
-  seine:{fileName:'seine.json', title:'LRG Seine'}
+  seine:{fileName:'seine.json', title:'LRG Seine'},
+  millersDance:{fileName:'FallaMillersDance.json', title: 'Millers Dance'}
 }
-var currentCompositionId ="morning"//'faune'//'seine'//'faune' //'jupiterII'
+var currentCompositionId ="millersDance"//"morning"//"millersDance"//'faune'//'seine'//'faune' //'jupiterII'
 
 const tt = function(aTime){
   let tr = g.trackers.getSpecFor(aTime)
@@ -111,7 +112,8 @@ const cbMidiSetup = function(){
 }
 var evHlp = require('./scripts/musicEvent.js').helpers
 
-var cbFileSelected = function( parsedJSON ){
+var cbFileSelected = function( parsedJSON ){ 
+  console.log('Trace cbFileSelected')
   g.performance = parsedJSON
   createTrackNameTable()
   g.trackers = asEnsembleTrackers.call({}, g.performance)
@@ -185,6 +187,7 @@ var recalcVDOM = function(aTime,trackers){
 };
 
 const midiSetup = require('./scripts/midiSetup')
+
 document.addEventListener('DOMContentLoaded', ()=>{
   console.log('Doc loaded')
     g.ctlUI = asCtlUI.call({})

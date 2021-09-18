@@ -118,7 +118,8 @@ var asPerformance = function(aMidiImport){
     let createProgramTrack = ()=>{
       return aTrack.event
         .filter( anEvent=> anEvent.type === 12)
-        .map( (anEvent, ix, arr)=>{
+        .map( (anEvent, ix, arr)=>{  //TÄSDÄ ?deltaTime???
+          //if ( ix < 1 ) anEvent.ticks = 0  //Jos jostain syystä ei patch-määrittelyä alussa 
           return {
             ticks: anEvent.ticks, ms: this.ticksToMs(anEvent.ticks),
             program: anEvent.data,

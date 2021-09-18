@@ -17,8 +17,8 @@ var asMidiSetup = function(){
 	  for ( i = iter.next(); i && !i.done; i = iter.next()) {
 	    this.inputs.push(i.value);
 	  }
-	  console.log(this.inputs );
-	  console.log(this.outputs);
+	  //console.log(this.inputs );
+	  //console.log(this.outputs);
 	  this.callOnSuccess.forEach( aListener => aListener(this) );
 	};
 	this.failure = (error) => console.log(error);

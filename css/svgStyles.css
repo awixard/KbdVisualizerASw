@@ -69,8 +69,18 @@
   stroke: rgb(206, 203, 200);
   stroke-width: 2;
 }
+.percussion{
+  fill:rgb(86, 89, 107);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
 .trumpets{
   fill:rgb(156, 44, 15);
+  stroke: rgb(206, 203, 200);
+  stroke-width: 2;
+}
+.piano{
+  fill:rgb(16, 65, 44);
   stroke: rgb(206, 203, 200);
   stroke-width: 2;
 }

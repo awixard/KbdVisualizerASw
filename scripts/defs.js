@@ -108,11 +108,23 @@ const toBeExported=
       noteLineStroke: 'White',
       min:40, max:55
     },
+    percussion:{
+      fill:'rgb(86, 89, 107)',
+      borderStroke: 'rgb(206, 203, 200)',
+      noteLineStroke: 'White',
+      min:40, max:55
+    },
     trumpets:{
       fill:'rgb(156, 44, 15)',
       borderStroke: 'rgb(206, 203, 200)',
       noteLineStroke: 'PapayaWhip',
       min:55, max:82
+    },
+    piano:{
+      fill:'rgb(16, 65, 44)',
+      borderStroke: 'rgb(206, 203, 200)',
+      noteLineStroke: 'rgb(206, 203, 200)',
+      min:20, max:88
     }
   }
 }
