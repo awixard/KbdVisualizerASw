@@ -67,14 +67,14 @@ millersDance: [
   { P127: ['s1',9]}, //percussion 
 
   { P127: ['s1',9]}, 
-  { P1:['s1', 11]}, //piano
-  { P46: ['s1,',12]},//harppu
-  { P48: ['s1',12], P49:['s1',12],P45:['s2',12] }, //violins I
-  { P48: ['s1',13], P49:['s1',13],P45:['s2',13] }, //violins II
+  { P0:['s1', 8]}, //piano
+  { P46: ['s1',10]},//harppu
+  { P48: ['s1',11], P49:['s1',11],P45:['s2',11] }, //violins I
+  { P48: ['s1',12], P49:['s1',12],P45:['s2',12] }, //violins II
 
-  { P48: ['s1',14], P49:['s1',14],P45:['s2',14] }, //violas
-  { P48: ['s1',15], P49:['s1',15],P45:['s2',15] }, //celli
-  { P48: ['s1',16], P49:['s1',16],P45:['s2',16] }  //basses
+  { P48: ['s1',13], P49:['s1',13],P45:['s2',13] }, //violas
+  { P48: ['s1',14], P49:['s1',14],P45:['s2',14] }, //celli
+  { P48: ['s1',15], P49:['s1',15],P45:['s2',15] }  //basses
 ],
 
 seine: [
@@ -136,7 +136,6 @@ gtanTest: [
 //var programMappings = morning//seine
 // tulee parametrina to asEnsemble: var programMappings = allProgramMappings.faune
 var asInstrument = function(aSynthRack, instrumentSpecFor0){
-  console.log("Trace: asInstrument")
   this.synthRack = aSynthRack
   if (this.programMap.def){
     this.synthId = this.programMap.def[0]; this.channelNr = this.programMap.def[1]
@@ -159,10 +158,11 @@ var asInstrument = function(aSynthRack, instrumentSpecFor0){
   }
   this.recalc = function(aSpec){ //aSpec is instrument/track spec
     let batch = []
-    if( aSpec.programSpec && aSpec.programSpec !== this.playBackState.program){
-      this.playBackState.program = aSpec.programSpec;
+    //if( aSpec.programSpec && aSpec.programSpec !== this.playBackState.program){
+    if( typeof(aSpec.programSpec)!=="undefined" && aSpec.programSpec !== this.playBackState.program){
+        this.playBackState.program = aSpec.programSpec;
       let pMapKey = 'P'+this.playBackState.program;
-      if(!this.synthId){ debugger;
+      if(!this.synthId){
         this.synthId = this.programMap[ pMapKey ][ 0 ]
         this.channelNr = this.programMap[ pMapKey ][ 1 ]
       } else setTimeout(()=>{
@@ -194,11 +194,10 @@ var asInstrument = function(aSynthRack, instrumentSpecFor0){
   return this
 }
 var asEnsemble = function(aMappingsName,specFor0){
-  programMappings = allProgramMappings[aMappingsName]
+  var programMappings = allProgramMappings[aMappingsName]
   this.playing = false
   this.instruments = []
   programMappings.forEach( (aMap, ix)=>{
-    debugger
     this.instruments.push(
       asInstrument.call({ programMap: aMap },g.synthRack, specFor0[ix])
     )
@@ -207,7 +206,7 @@ var asEnsemble = function(aMappingsName,specFor0){
     if (g.timerState.playState === ':stopped' && this.playing) 
       this.stopPlaying()
     else {
-      this.instruments.forEach( (anInstrument, ix)=>anInstrument.recalc(aSpec[ix]) )
+      this.instruments.forEach( (anInstrument, ix)=>{ anInstrument.recalc(aSpec[ix]) } )
       this.playing = true
     }
   }

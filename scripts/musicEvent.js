@@ -44,7 +44,7 @@ var asMusicEvent = function(){
 	}
   return this;
 };
-var newNoteOff = function( aNote ){ return asMusicEvent.call({}).asNoteOff( aNote )}
+//var newNoteOff = function( aNote ){ return asMusicEvent.call({}).asNoteOff( aNote )}
 
 module.exports ={
 	'asMusicEvent': asMusicEvent,

@@ -33,7 +33,6 @@ const asCCSpanTracker = function( aCCSpanArray, aControllerNr ){
     if ( aTime < this.ccSpans[this.ix].ms) this.ix = 0
     var  len = this.ccSpans.length; 
     while( this.ix < len && !(aTime >= this.ccSpans[this.ix].ms && aTime < this.ccSpans[this.ix].usedUntilMs) ) this.ix++
-    //if (this.ix === len) debugger
     return { cc: this.controllerNr, value:this.ccSpans[this.ix].value }
   }
   return this
@@ -54,7 +53,6 @@ const asProgramSpanTracker = function( aProgramSpanArray ){
     let len = this.programs.length
     while( this.ix < len && !(aTime >= this.programs[this.ix].ms && aTime < this.programs[this.ix].usedUntilMs) )
       this.ix++
-    //if (!this.programs[this.ix]) debugger;
     return this.programs[this.ix].program
   }
   return this
@@ -138,24 +136,11 @@ const asEnsembleTrackers = function( performanceDataArray ){
       if (ix ===-1) return this.tempoTrack[len-1] 
       else return this.tempoTrack[ix-1]       
     }
-    let theSpan = getSpan(); //if (!theSpan) debugger
+    let theSpan = getSpan()
     let diffMs = ms - theSpan.ms
     let diffTicks = diffMs / this.msInTick(theSpan.bpm)
     return theSpan.ticks + diffTicks
   }
-/*
-  this.msToTicks = function(ms){
-    let theSpan; let len = this.tempoTrack.length
-    if( len === 1 ) theSpan = this.tempoTrack[0]
-    let ix = this.tempoTrack.findIndex(aSpan=>aSpan.ms >= ms )
-    if (ix ===-1) {theSpan = this.tempoTrack[len]; } 
-    else theSpan = this.tempoTrack[ix-1]
-
-    let diffMs = ms - theSpan.ms
-    let diffTicks = diffMs / this.msInTick(theSpan.bpm)
-    return theSpan.ticks + diffTicks
-  
-*/
   this.ticksToMs = function(ticks){
     let ev = this.tempoTrack.find( anItem => ticks >= anItem.ticks && ticks < anItem.untilTicks )
     return ev.ms + (ticks - ev.ticks) * this.msInTick(ev.bpm)

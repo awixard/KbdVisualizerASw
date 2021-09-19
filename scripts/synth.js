@@ -4,6 +4,7 @@ var asSynth = function(aDeviceName, aMidiSetup ){
 	this.deviceName = aDeviceName;
 	this.midiSetup = aMidiSetup;
 	this.midiOutDevice = this.midiSetup.getOutputNamed(this.deviceName);
+	this.midiOutDevice.open()
 
 	this.addChannel= function( aChannelNr ){
 		let newChannel = asSynthChannel.call({}, this, aChannelNr);
@@ -41,9 +42,9 @@ var asSynthChannel = function(aSynth, aChannelNr){
 	this.nowPlaying = {};
 
 	this.noteOn = function(aNote, aVelocity){
-		let msg = Uint8Array.from([0x90+this.channelNr, aNote,aVelocity]);
-		that.midiOutDevice.send( msg );
-		this.nowPlaying['N'+aNote] = true;
+		let msg = Uint8Array.from([0x90+this.channelNr, aNote,aVelocity])
+		that.midiOutDevice.send( msg )
+		this.nowPlaying['N'+aNote] = true
 	};
 	this.noteOff = function(aNote){
 		let key = 'N'+aNote
@@ -87,6 +88,7 @@ var asSynthChannel = function(aSynth, aChannelNr){
 	return this;
 };
 var asSynthRack = function(aMidiSetup){
+	this.x = true
 	this.synths = {};
 	this.midiSetup = aMidiSetup;
 	this.addSynth = function(aName, aMidiPortName){
@@ -96,6 +98,7 @@ var asSynthRack = function(aMidiSetup){
 		this.synths[aMusicEvent.synthId].handleEvent(aMusicEvent);
 	};
 	this.exec = events=>{
+		//if (this.x) {console.log(events); this.x = false }
 		events = [].concat(events)
 		events.forEach( anEvent=>this.handleEvent(anEvent) )
 	}

@@ -52,6 +52,7 @@ const hlp = require('./scripts/helpers.js')
 const vTracks = require('./scripts/visualTracks.js')
 const gebi = hlp.gebi
 g.timer = require('./scripts/timer.js')
+const fs = require('fs')
 
 const fileSpecs = {  
   morning:{ fileName: "grieg-morning-B.json", title:"Grieg: Morning mood"},
@@ -60,7 +61,10 @@ const fileSpecs = {
   seine:{fileName:'seine.json', title:'LRG Seine'},
   millersDance:{fileName:'FallaMillersDance.json', title: 'Millers Dance'}
 }
-var currentCompositionId ="millersDance"//"morning"//"millersDance"//'faune'//'seine'//'faune' //'jupiterII'
+//var currentCompositionId ="millersDance"//"morning"//"millersDance"//'faune'//'seine'//'faune' //'jupiterII'
+var currentCompositionId ="millersDance"
+//var currentCompositionId ="morning"
+g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
 
 const tt = function(aTime){
   let tr = g.trackers.getSpecFor(aTime)
@@ -107,13 +111,15 @@ const cbMidiSetup = function(){
   g.kbd = asKeyboard.call({}, 'Yamaha', midiSetup)
   //g.kbd.addListener(anEvent=> g.synthRack.handleEvent(anEvent.setPlayer('s1', 15)))
   g.kbd.addListener(g.midiKeyMapper.act)
+  if ( fs.existsSync(g.fullPath ) ){
+  cbFileSelected( JSON.parse(fs.readFileSync(g.fullPath)))
+}
   g.appState.midiReady = true
   tt(0)
 }
 var evHlp = require('./scripts/musicEvent.js').helpers
 
 var cbFileSelected = function( parsedJSON ){ 
-  console.log('Trace cbFileSelected')
   g.performance = parsedJSON
   createTrackNameTable()
   g.trackers = asEnsembleTrackers.call({}, g.performance)
@@ -356,10 +362,14 @@ const asciiKbdMapper = function(){
 }.call({})
 window.addEventListener('keyup',asciiKbdMapper.handleAsciiKbdEvent )
 
-fs = require('fs')
-g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
-if ( fs.existsSync(g.fullPath ) ){
-  cbFileSelected( JSON.parse(fs.readFileSync(g.fullPath)))
+const on = function(){
+  debugger
+  let eb = [evHlp.newNoteOn(73,46).setPlayer('s1',0)]
+  g.synthRack.exec(eb)
+}
+const off = function(){
+  let eb = [evHlp.newNoteOff(73).setPlayer('s1',0)]
+  g.synthRack.exec(eb)
 }
 
 </script>
