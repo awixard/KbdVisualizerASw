@@ -29,13 +29,13 @@ const getOffsetsForGroup = aNoteNr=>{
 const trackNameTableJupiterII = [ //Jupiter II
   'flutes','oboes', 'bassoons', 'frenchHorns', 'violins', 'violins', 'violas', 'cellos','basses'
 ]
-*/
+
 const trackNameTableMorning =[
   'flutes', 'oboes', 'clarinets', 'bassoons','frenchHorns',
   'frenchHorns', 'trumpets','timpanis', 'violinsI', 'violinsII', 
   'violas','cellos', 'basses'
 ]
-
+*/
 var trackNameTable
 const createTrackNameTable = function(){
   g.trackNameTable = g.performance.noteTracks.map(aTrack => aTrack.trackTitle.split(' ')[0])
@@ -54,7 +54,7 @@ const getInstrumentNamesForTracksPlayingThisNote = function( aNote, aTime, anEns
 const createMarkerVNode = function(offsetX, offsetY, aTrackName){
   const strokeWidthPx = 2
   let iDef = defs.instrumentDefs[aTrackName]
-  if (!iDef) debugger
+  //if (!iDef) debugger
   return vd.h('circle',{
     namespace:"http://www.w3.org/2000/svg",
     attributes:{ 
