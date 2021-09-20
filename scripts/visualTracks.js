@@ -56,11 +56,13 @@ const drawAllNoteLines = function(dCtx){
     tracksPerInstrumentName[anInstName].forEach (aSimpleTrack=>{
       dCtx.beginPath()
       aSimpleTrack.notes.forEach( aNoteRec=>{
-        let x1 = leftPaddingPx + xScale * aNoteRec.ticks
-        let y = (outerIx+1)*trackHeightPx-trackPaddingPx-( (aNoteRec.note-defs.instrumentDefs[anInstName].min) * noteScale )
-        dCtx.moveTo(x1, y)
-        let x2 = leftPaddingPx + xScale * (aNoteRec.ticks+aNoteRec.durationTicks)
-        dCtx.lineTo(x2,y)
+        if (defs.noteInRange(aNoteRec.note, anInstName)){
+          let x1 = leftPaddingPx + xScale * aNoteRec.ticks
+          let y = (outerIx+1)*trackHeightPx-trackPaddingPx-( (aNoteRec.note-defs.instrumentDefs[anInstName].min) * noteScale )
+          dCtx.moveTo(x1, y)
+          let x2 = leftPaddingPx + xScale * (aNoteRec.ticks+aNoteRec.durationTicks)
+          dCtx.lineTo(x2,y)
+        }
       })
       dCtx.stroke()
     })

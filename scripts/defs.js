@@ -1,3 +1,5 @@
+var instrDefs
+
 const toBeExported=
 {
   instrumentDefs:{
@@ -126,10 +128,17 @@ const toBeExported=
       noteLineStroke: 'rgb(206, 203, 200)',
       min:20, max:88
     }
+  },
+  noteInRange: function(noteVal, instrName){
+    let instrSpec = instrDefs[instrName]
+    return noteVal >= instrSpec.min && noteVal <= instrSpec.max
   }
 }
+instrDefs = toBeExported.instrumentDefs
+
 for( anInstName in toBeExported.instrumentDefs){
   let o = toBeExported.instrumentDefs[anInstName]
   o.halfSteps = o.max-o.min 
 }
+
 module.exports = toBeExported
