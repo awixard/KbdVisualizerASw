@@ -75,6 +75,7 @@ var asPerformance = function(aMidiImport){
         })
       })
       if (Object.keys(nowPlaying).length > 0) {console.log("Orphan note on msgs"); console.log(nowPlaying)}
+      if (!resultTrack.noteSpans[0]) debugger
       if (resultTrack.noteSpans[0].ticks > 0)
         resultTrack.noteSpans.splice(0, 0, {
           ticks: 0, presentlyPlaying:{}, ms:0, 
