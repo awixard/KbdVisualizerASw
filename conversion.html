@@ -22,6 +22,12 @@
 
       performance = asPerformance.call({}, obj)
       console.log(performance)
+      
+      var trackNameTable = performance.data.noteTracks.map(aTrack => aTrack.trackTitle.split(' ')[0])
+      let defs = require('./scripts/defs.js')
+      performance.data.noteTracks.forEach((aTrack,ix) => {
+        aTrack.notes = aTrack.notes.filter(aNote=>defs.noteInRange(aNote.note, trackNameTable[ix]))
+      });
       let fullPath = path.join(__dirname,'..','jsonMusic',performance.data.metaInfo.fileName+'.json')
       fs.writeFileSync( fullPath, JSON.stringify(performance.data) )
     };

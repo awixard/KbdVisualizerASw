@@ -108,13 +108,13 @@ const toBeExported=
       fill:'rgb(86, 89, 107)',
       borderStroke: 'rgb(206, 203, 200)',
       noteLineStroke: 'White',
-      min:40, max:55
+      min:31, max:60
     },
     percussion:{
       fill:'rgb(86, 89, 107)',
       borderStroke: 'rgb(206, 203, 200)',
       noteLineStroke: 'White',
-      min:40, max:55
+      min:26, max:83
     },
     trumpets:{
       fill:'rgb(156, 44, 15)',

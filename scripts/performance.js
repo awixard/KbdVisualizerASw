@@ -1,4 +1,5 @@
 hlp = require('./helpers.js')
+defs = require('./defs.js')
 
 const hugeTicks = 240*180*60*8 // abt 8 hours
 const hugeTimeMs = hugeTicks * 1000
@@ -51,7 +52,7 @@ var asPerformance = function(aMidiImport){
 
     let createNoteSpanTrack = ()=>{  
       var resultTrack={noteSpans:[]}
-      this.setTickTimesForTrack( aTrack )
+      //this.setTickTimesForTrack( aTrack )
       let noteMsgs = aTrack.event.filter( anEvent=>anEvent.type === 8 || anEvent.type === 9)
       var nowPlaying = {};
       noteMsgs.forEach( anEvent=>{
@@ -158,11 +159,17 @@ var asPerformance = function(aMidiImport){
     }
     let trackTitleEvent = aTrack.event.find( e => (e.type === 255) && (e.metaType === 3) )
     let trackTitle = trackTitleEvent? trackTitleEvent.data : 'undefined'
+    let instrumentName = trackTitle.split(' ')[0]
+/////////////////TÄSDÄ
     let cct = createCCTracks()
     if (Object.keys(cct).length === 0) console.log(trackTitle+' has no CC-events')
+    let pt = createProgramTrack()
+    aTrack.event = aTrack.event.filter(anEvent=> (anEvent.type === 8 || anEvent.type === 9) &&
+      defs.noteInRange(anEvent.data[0], instrumentName))
+    debugger
     return {
       'trackTitle': trackTitle,
-      noteSpans:createNoteSpanTrack(), notes: createNoteTrack(), programs: createProgramTrack(), ccTracks: cct
+      noteSpans:createNoteSpanTrack(), notes: createNoteTrack(), programs: pt, ccTracks: cct
     }
   }
   this.setTickTimes()

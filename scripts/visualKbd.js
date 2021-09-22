@@ -37,7 +37,7 @@ const trackNameTableMorning =[
 ]
 */
 var trackNameTable
-const createTrackNameTable = function(){
+const createTrackNameTable = function(){ //Täsdä onko oikea paikka tälle?
   g.trackNameTable = g.performance.noteTracks.map(aTrack => aTrack.trackTitle.split(' ')[0])
   trackNameTable = g.trackNameTable
 }
