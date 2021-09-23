@@ -20,8 +20,8 @@
   <div id='VDOMRoot'></div>
 
   <!--input type="file" id="fileReader"-->
-  <button id="btnSuspendGo" disabled="true">C7: Sus/Go</button>
-  <button id="btnStop" disabled="true">#C7:Stop</button>
+  <button id="btnSuspendGo" disabled="true">C7/Space:Sus/Go</button>
+  <button id="btnStop" disabled="true">#C7/AltLeft:Stop</button>
   <button id="btnSlow" disabled="true">Speed to 0.25</button>
   <button id="btnMinus10s" disabled="true">- 10s</button>
   <button id="btnRewind" disabled="true">Rewind</button>
@@ -361,7 +361,7 @@ const asciiKbdMapper = function(){
   return this
 }.call({})
 window.addEventListener('keyup',asciiKbdMapper.handleAsciiKbdEvent )
-
+/*
 const on = function(){
   debugger
   let eb = [evHlp.newNoteOn(73,46).setPlayer('s1',0)]
@@ -371,6 +371,6 @@ const off = function(){
   let eb = [evHlp.newNoteOff(73).setPlayer('s1',0)]
   g.synthRack.exec(eb)
 }
-
+*/
 </script>
 </html>
