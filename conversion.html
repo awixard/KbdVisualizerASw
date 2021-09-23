@@ -24,11 +24,14 @@
       console.log(performance)
       
       var trackNameTable = performance.data.noteTracks.map(aTrack => aTrack.trackTitle.split(' ')[0])
+      /* Tämä hoidetaan oikeammin perfornace.js:ssä
       let defs = require('./scripts/defs.js')
       performance.data.noteTracks.forEach((aTrack,ix) => {
         aTrack.notes = aTrack.notes.filter(aNote=>defs.noteInRange(aNote.note, trackNameTable[ix]))
       });
-      let fullPath = path.join(__dirname,'..','jsonMusic',performance.data.metaInfo.fileName+'.json')
+      */
+//      let fullPath = path.join(__dirname,'..','jsonMusic',performance.data.metaInfo.fileName+'.json')
+      let fullPath = 'F:\\awAppData\\kbdVisualizer\\jsonMusic\\'+performance.data.metaInfo.fileName+'.json'
       fs.writeFileSync( fullPath, JSON.stringify(performance.data) )
     };
     
