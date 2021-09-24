@@ -25,27 +25,11 @@ const getOffsetsForGroup = aNoteNr=>{
     y: (nrOfOctaves-Math.floor(aNoteNr/12))*octaveHeight+octaveHeight/2
   }
 }
-/*
-const trackNameTableJupiterII = [ //Jupiter II
-  'flutes','oboes', 'bassoons', 'frenchHorns', 'violins', 'violins', 'violas', 'cellos','basses'
-]
-
-const trackNameTableMorning =[
-  'flutes', 'oboes', 'clarinets', 'bassoons','frenchHorns',
-  'frenchHorns', 'trumpets','timpanis', 'violinsI', 'violinsII', 
-  'violas','cellos', 'basses'
-]
-*/
 var trackNameTable
 const createTrackNameTable = function(){ //Täsdä onko oikea paikka tälle?
   g.trackNameTable = g.performance.noteTracks.map(aTrack => aTrack.trackTitle.split(' ')[0])
   trackNameTable = g.trackNameTable
 }
-//const testtrackNameTable = ['flute', 'oboe'] 
-//var trackNameTable = trackNameTableJupiterII
-//var trackNameTable = trackNameTableMorning  //TÄSDÄ Mitä virkaa tällä? miksi huilu kummittelee s2-syntikassa. Kts myös ensemble.js
-//var trackNameTable = createTrackNameTable() only when loaded
-
 const getInstrumentNamesForTracksPlayingThisNote = function( aNote, aTime, anEnsembleTracker){
   return anEnsembleTracker
     .getIndicesOfTracksPlayingThisNote(aNote, aTime)

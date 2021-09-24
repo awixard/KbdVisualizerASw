@@ -160,7 +160,7 @@ var asInstrument = function(aSynthRack, instrumentSpecFor0){
     let batch = []
     //if( aSpec.programSpec && aSpec.programSpec !== this.playBackState.program){
     if( typeof(aSpec.programSpec)!=="undefined" && aSpec.programSpec !== this.playBackState.program){
-        this.playBackState.program = aSpec.programSpec;
+      this.playBackState.program = aSpec.programSpec;
       let pMapKey = 'P'+this.playBackState.program;
       if(!this.synthId){
         this.synthId = this.programMap[ pMapKey ][ 0 ]
