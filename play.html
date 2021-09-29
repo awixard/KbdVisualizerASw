@@ -71,13 +71,14 @@ const tt = function(aTime){
   if( !tr ) { /*console.log('EOP'); */
     if (g.timerState.playState === ':stopped') return
     g.timer.stop();
+    setTimeout( ()=>g.timer.setTimeToStart(0),0)
     g.ensemble.recalc()
     recalc(); 
     return 
   }
   g.ensemble.recalc(tr)  //Toimi vasta kun midi setup on tehty
   recalcVDOM(aTime, g.trackers) //VisualKbd
-  recalc()
+  recalc()//UI state?
   vTracks.drawPlayCursor(g.trackers.msToTicks( aTime ), aTime)
   if (aTime === 0) vTracks.scrollControl.fromStart()
   if (g.timerState.playState === ':playing')
