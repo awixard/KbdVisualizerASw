@@ -163,8 +163,7 @@ var asPerformance = function(aMidiImport){
     let cct = createCCTracks()
     if (Object.keys(cct).length === 0) console.log(trackTitle+' has no CC-events')
     let pt = createProgramTrack()
-    aTrack.event = aTrack.event.filter(anEvent=> (anEvent.type === 8 || anEvent.type === 9) &&
-      defs.noteInRange(anEvent.data[0], instrumentName))
+    aTrack.event = aTrack.event.filter(anEvent=> (anEvent.type === 8 || anEvent.type === 9) )
     return {
       'trackTitle': trackTitle,
       noteSpans:createNoteSpanTrack(), notes: createNoteTrack(), programs: pt, ccTracks: cct
