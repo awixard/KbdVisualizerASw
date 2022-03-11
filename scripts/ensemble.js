@@ -2,7 +2,7 @@ evHlp = require('./musicEvent.js').helpers
 
 var allProgramMappings = 
 {jupiterI:[
-  { P73: ['s2',0]}, //flute
+  { P73: ['s1',0]}, //flute
   { P68: ['s1',1]}, //oboe
   { P70: ['s1',2]}, //bassoon
   { P60: ['s1',3]}, //fhorn
@@ -126,6 +126,51 @@ faune: [
   {def:['s2', 8]},
 ],
 
+sirenes: [
+    // s1 winds s2 chorus s3 strs s4 gtan
+  {def:['s1', 0]},  //flutes 1
+  {def:['s1', 1]},  //flutes 2
+  {def:['s1', 2]},  //oboes 3
+  {def:['s1', 3]},  //englishHorns 4
+  {def:['s1', 4]},  //clarinets 5
+
+  {def:['s1', 5]},  //bassoons 6
+  {def:['s1', 6]},  //bassoons 7
+  {def:['s1', 7]},  //horns 8
+  {def:['s1', 8]},  //horns 9
+  {def:['s1', 9]},  //trumpettes 10
+
+  {def:['s4', 0]}, //harp 11
+  {def:['s4', 1]}, //harp 12
+  {def:['s2', 0]}, //vox 13
+  {def:['s2', 1]}, //vox 14
+  {def:['s2', 2]}, //vox 15
+
+  {def:['s3', 3]}, //vox 16
+  {def:['s3', 0]},  //vln I d1 17
+  {def:['s3', 15]}, //vln I d1 pizz 18
+  {def:['s3', 1]},  //vln I d2 19
+  {def:['s3', 2]},  //Vln II d1 20
+
+  {def:['s3', 15]}, //vln II d1 pizz 21
+  {def:['s3', 2]},  //Vln II d2 22 
+  {def:['s3', 15]}, //vln II d2 pizz 23 
+  {def:['s3', 3]},  //vla d1 24
+  {def:['s3', 15]}, //vla d1 pizz 25
+
+  {def:['s3', 4 ]}, //vla d2 26
+  {def:['s3', 15]}, //vla d2 pizz 27
+  {def:['s3', 5]}, //cel d1 28
+  {def:['s3', 15]}, //cel d1 pizz 29
+  {def:['s3', 6]}, //cel d2 30
+
+  {def:['s3', 15]}, //cel d2 pizz 31
+  {def:['s3', 7]}, //bass d1 32
+  {def:['s3', 15]}, //bass d1 pizz 33
+  {def:['s3', 8]}, //bass d2 34
+  {def:['s3', 15]}, //bass d2 pizz 35
+],
+
 gtanTest: [
   {def:['s1',0]},
   {def:['s1',1]},
@@ -166,6 +211,7 @@ var asInstrument = function(aSynthRack, instrumentSpecFor0){
         this.synthId = this.programMap[ pMapKey ][ 0 ]
         this.channelNr = this.programMap[ pMapKey ][ 1 ]
       } else setTimeout(()=>{
+        if (!this.programMap[ pMapKey ]) debugger
         this.synthId = this.programMap[ pMapKey ][ 0 ]
         this.channelNr = this.programMap[ pMapKey ][ 1 ]
       }, 0)
@@ -195,6 +241,7 @@ var asInstrument = function(aSynthRack, instrumentSpecFor0){
 }
 var asEnsemble = function(aMappingsName,specFor0){
   var programMappings = allProgramMappings[aMappingsName]
+  if( !programMappings ) debugger
   this.playing = false
   this.instruments = []
   programMappings.forEach( (aMap, ix)=>{

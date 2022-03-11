@@ -127,6 +127,12 @@ const toBeExported=
       borderStroke: 'rgb(206, 203, 200)',
       noteLineStroke: 'rgb(206, 203, 200)',
       min:20, max:88
+    },
+    vox:{
+      fill:'rgb(16, 16, 198)',
+      borderStroke: 'rgb(206, 203, 200)',
+      noteLineStroke: 'rgb(206, 203, 200)',
+      min:32, max:86
     }
   },
   noteInRange: function(noteVal, instrName){

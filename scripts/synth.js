@@ -59,6 +59,8 @@ var asSynthChannel = function(aSynth, aChannelNr){
 		}
 	};
 	this.setCC = function(anEvent){
+    if (that.channelNr > 15) debugger
+    //console.log( that.channelNr )
 		that.midiOutDevice.send(Uint8Array.from([0xb0+that.channelNr, anEvent.ccNr, anEvent.value]));			
 	};
 	this.setProgram = function(anEvent){

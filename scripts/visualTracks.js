@@ -70,6 +70,7 @@ const drawAllNoteLines = function(dCtx){
 const drawCTrackBackgrounds = function(dCtx){
   let y = topPaddingPx; let x = leftPaddingPx
   cTrackOdrder.forEach(anInstName=>{
+    if (!defs.instrumentDefs[anInstName]) debugger
     dCtx.fillStyle = defs.instrumentDefs[anInstName].fill
     dCtx.fillRect(x,y, canvasWidthPx, trackHeightPx)
     y += trackHeightPx

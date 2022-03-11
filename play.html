@@ -59,12 +59,16 @@ const fileSpecs = {
   faune: {fileName:"faune-gpo5-vkbd-B.json", title:"Debussy Faune"},
   jupiterII:{fileName: 'mozart-41-II-B.json', title:'Mozart Jupiter II'},
   seine:{fileName:'seine.json', title:'LRG Seine'},
-  millersDance:{fileName:'FallaMillersDance.json', title: 'Millers Dance'}
+  millersDance:{fileName:'FallaMillersDance.json', title: 'Millers Dance'},
+  sirenes:{ fileName:'DebussySirenes.json', title: 'Debussy Sirenes'}
 }
 //var currentCompositionId ="millersDance"//"morning"//"millersDance"//'faune'//'seine'//'faune' //'jupiterII'
-var currentCompositionId ="millersDance"
-//var currentCompositionId ="morning"
+//var currentCompositionId ="sirenes"
+var currentCompositionId ="faune"
 g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
+
+//g.playthruSynth = 's1'; g.playthruChannel = 15 // Millers dance
+g.playthruSynth = 's3'; g.playthruChannel = 15 // faune
 
 const tt = function(aTime){
   let tr = g.trackers.getSpecFor(aTime)
@@ -108,7 +112,9 @@ const cbMidiSetup = function(){
   g.synthRack = asSynthRack.call({},midiSetup )
   g.synthRack.addSynth('s1','01. Internal MIDI')
   g.synthRack.addSynth('s2','02. Internal MIDI')
-  g.synthRack.addSynth('s3','Yamaha')
+  g.synthRack.addSynth('s3','03. Internal MIDI')
+  g.synthRack.addSynth('s4','04. Internal MIDI')
+  g.synthRack.addSynth('k1','Yamaha')
   g.kbd = asKeyboard.call({}, 'Yamaha', midiSetup)
   //g.kbd.addListener(anEvent=> g.synthRack.handleEvent(anEvent.setPlayer('s1', 15)))
   g.kbd.addListener(g.midiKeyMapper.act)
@@ -120,7 +126,7 @@ const cbMidiSetup = function(){
 }
 var evHlp = require('./scripts/musicEvent.js').helpers
 
-var cbFileSelected = function( parsedJSON ){ 
+var cbFileSelected = function( parsedJSON ){
   g.performance = parsedJSON
   createTrackNameTable()
   g.trackers = asEnsembleTrackers.call({}, g.performance)
@@ -323,7 +329,7 @@ const asMidiKeyMapper = function(){
       return this
     }
     if(g.kbdState.mode !== ':command'){
-      g.synthRack.handleEvent(aMusicEvent.setPlayer('s1', 15))
+      g.synthRack.handleEvent(aMusicEvent.setPlayer(g.playthruSynth, g.playthruChannel))
       return this
     }
     if (aMusicEvent.type !== 'on') return

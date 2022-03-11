@@ -47,6 +47,7 @@ const asProgramSpanTracker = function( aProgramSpanArray ){
     if (this.programs.length === 0) return -1 // same as inital value in ensemble state
     if ( this.ix < 0 ){
       this.ix = this.programs.findIndex( aSpec=> aTime >= aSpec.ms && aTime < aSpec.usedUntilMs)
+      if (this.ix<0) return -1
       return this.programs[this.ix].program
     }
     if ( aTime < this.programs[this.ix].ms) this.ix = 0
