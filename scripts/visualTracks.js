@@ -2,7 +2,7 @@ const defs = require('./defs.js')
 const g = require('./globals.js')
 /* cTrack = compound track eg. all flute tracks combined into a single track*/ 
 
-const canvasHeightPx = 800
+const canvasHeightPx = 1045
 const canvasDivWidth = 1200
 const trackPaddingPx = 3
 const leftPaddingPx = 0
