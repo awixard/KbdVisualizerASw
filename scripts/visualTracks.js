@@ -25,7 +25,7 @@ const doPerformanceSetup = function(){
   pcCanvasNode = document.getElementById('playCursorLayer')
   let tpb = g.performance.metaInfo.ticksPerBeat
   let nrOfBeats = g.performance.metaInfo.durationTicks / tpb
-  xScale = canvasDivWidth/(nrOfVisibleBeats*tpb)  // px per tick
+  xScale = canvasDivWidth/(nrOfVisibleBeats*tpb*2)  // TÄSDÄ px per tick kerroin 2, koska Canvas max leveys muuten ylittyy
   canvasWidthPx =  xScale * g.performance.metaInfo.durationTicks
   canvasNode.width = canvasWidthPx
   pcCanvasNode.width = canvasWidthPx
@@ -67,7 +67,7 @@ const drawAllNoteLines = function(dCtx){
   })
 }
 
-const drawCTrackBackgrounds = function(dCtx){
+const drawCTrackBackgrounds = function(dCtx){ //TÄSDÄ
   let y = topPaddingPx; let x = leftPaddingPx
   cTrackOdrder.forEach(anInstName=>{
     if (!defs.instrumentDefs[anInstName]) debugger

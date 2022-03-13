@@ -64,11 +64,12 @@ const fileSpecs = {
 }
 //var currentCompositionId ="millersDance"//"morning"//"millersDance"//'faune'//'seine'//'faune' //'jupiterII'
 //var currentCompositionId ="sirenes"
-var currentCompositionId ="faune"
+var currentCompositionId ="sirenes"
 g.fullPath = 'f:\\awAppData\\kbdVisualizer\\jsonMusic\\'+ fileSpecs[currentCompositionId].fileName
 
 //g.playthruSynth = 's1'; g.playthruChannel = 15 // Millers dance
-g.playthruSynth = 's3'; g.playthruChannel = 15 // faune
+//g.playthruSynth = 's3'; g.playthruChannel = 15 // faune
+g.playthruSynth = 's3'; g.playthruChannel = 14 // seireenit
 
 const tt = function(aTime){
   let tr = g.trackers.getSpecFor(aTime)

@@ -146,7 +146,7 @@ sirenes: [
   {def:['s2', 1]}, //vox 14
   {def:['s2', 2]}, //vox 15
 
-  {def:['s3', 3]}, //vox 16
+  {def:['s2', 3]}, //vox 16
   {def:['s3', 0]},  //vln I d1 17
   {def:['s3', 15]}, //vln I d1 pizz 18
   {def:['s3', 1]},  //vln I d2 19
